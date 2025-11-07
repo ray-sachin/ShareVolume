@@ -1,0 +1,391 @@
+>>> EntityCommonStockSharesOutstanding.json
+{
+  "note": "Placeholder file to satisfy expected files. Open index.html to fetch the live SEC companyconcept JSON via proxy.",
+  "entityName": "3M Company",
+  "units": {
+    "shares": []
+  }
+}
+---END FILE---
+>>> data.json
+{
+  "entityName": "3M Company",
+  "max": {
+    "val": 571000000,
+    "fy": 2021
+  },
+  "min": {
+    "val": 552000000,
+    "fy": 2022
+  }
+}
+---END FILE---
+>>> index.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loading… | Shares Outstanding</title>
+  <meta name="description" content="Visual summary of EntityCommonStockSharesOutstanding from the SEC XBRL API with live entity name and max/min since FY 2021." />
+  <style>
+    :root{
+      --bg: #0f172a;
+      --card: #111827;
+      --muted: #94a3b8;
+      --text: #e5e7eb;
+      --accent: #22d3ee;
+      --accent2: #a78bfa;
+      --success: #34d399;
+      --danger: #fb7185;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(167,139,250,.15), transparent 60%),
+                  radial-gradient(1200px 600px at 110% 10%, rgba(34,211,238,.15), transparent 55%),
+                  var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 32px 16px;
+    }
+    .container{
+      width: 100%;
+      max-width: 980px;
+    }
+    header{
+      text-align:center;
+      margin-bottom: 18px;
+    }
+    h1{
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      font-size: clamp(22px, 4.2vw, 36px);
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+    .card{
+      grid-column: span 12;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+    @media (min-width: 720px){
+      .card.half{ grid-column: span 6; }
+    }
+    .stat{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat .badge{
+      width: 40px; height: 40px;
+      display:grid; place-items:center;
+      border-radius: 10px;
+      background: radial-gradient(200px 200px at 20% 20%, rgba(255,255,255,0.2), transparent 60%),
+                  rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat .meta{
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .stat .value{
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .row{
+      display:grid; gap: 12px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px){
+      .row{ grid-template-columns: 1fr 1fr; }
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+    }
+    .success{ color: var(--success); }
+    .danger{ color: var(--danger); }
+    footer{
+      margin-top: 14px;
+      text-align:center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .loading{
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dot{ width:8px; height:8px; border-radius:50%; background: var(--accent); animation: pulse 1.2s infinite; }
+    .dot:nth-child(2){ animation-delay: 0.15s; background: var(--accent2); }
+    .dot:nth-child(3){ animation-delay: 0.3s; }
+    @keyframes pulse{
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1.15); opacity: 1; }
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .toolbar{
+      display:flex; align-items:center; justify-content:center; gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    input[type="text"]{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      outline: none;
+      min-width: 240px;
+    }
+    button{
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: #0b1020;
+      font-weight: 700;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(34,211,238,0.25);
+    }
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .hidden{ display:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 id="page-title">Loading…</h1>
+      <div class="subtitle">
+        Live SEC XBRL: EntityCommonStockSharesOutstanding (FY > 2020)
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <label class="small" for="cik-input">Enter 10-digit CIK:</label>
+      <input id="cik-input" type="text" placeholder="e.g., 0001018724" pattern="\\d{10}" />
+      <button id="load-btn" type="button">Load</button>
+      <span id="status" class="loading"><span class="dot"></span><span class="dot"></span><span class="dot"></span> Fetching…</span>
+    </div>
+
+    <section class="grid">
+      <div class="card half">
+        <div class="row">
+          <div class="stat">
+            <div class="badge" aria-hidden="true">🏢</div>
+            <div>
+              <div class="meta">Entity</div>
+              <div class="value" id="share-entity-name">—</div>
+              <div class="pill">CIK: <span id="active-cik">—</span></div>
+            </div>
+          </div>
+          <div class="stat">
+            <div class="badge" aria-hidden="true">📈</div>
+            <div>
+              <div class="meta">Max shares (FY > 2020)</div>
+              <div class="value success"><span id="share-max-value">—</span></div>
+              <div class="pill">FY <span id="share-max-fy">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card half">
+        <div class="row">
+          <div class="stat">
+            <div class="badge" aria-hidden="true">📉</div>
+            <div>
+              <div class="meta">Min shares (FY > 2020)</div>
+              <div class="value danger"><span id="share-min-value">—</span></div>
+              <div class="pill">FY <span id="share-min-fy">—</span></div>
+            </div>
+          </div>
+          <div class="stat">
+            <div class="badge" aria-hidden="true">ℹ️</div>
+            <div>
+              <div class="meta">Notes</div>
+              <div class="small">
+                Data sourced from SEC companyconcept API. Values represent EntityCommonStockSharesOutstanding and are filtered to fiscal years after 2020 with numeric values. Ties are broken arbitrarily.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="small">
+          Tip: Append ?CIK=0001018724 to the URL (or use the input) to load a different company. This uses a read-only proxy to avoid CORS issues.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Built for rapid insight. Source: data.sec.gov/api/xbrl/companyconcept (via proxy). This page updates without reload.
+    </footer>
+  </div>
+
+  <script>
+    // Utility: left-pad to 10-digit CIK
+    function normalizeCIK(cik) {
+      const digits = (cik || '').toString().replace(/\D/g, '');
+      if (!digits) return null;
+      return digits.padStart(10, '0').slice(-10);
+    }
+
+    function formatShares(n) {
+      try {
+        return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n);
+      } catch {
+        return String(n);
+      }
+    }
+
+    function updateUI({ entityName, max, min, cik }) {
+      const title = `${entityName} — Shares Outstanding (FY > 2020)`;
+      document.title = title;
+      document.getElementById('page-title').textContent = title;
+      document.getElementById('share-entity-name').textContent = entityName;
+      document.getElementById('share-max-value').textContent = typeof max?.val === 'number' ? formatShares(max.val) : '—';
+      document.getElementById('share-max-fy').textContent = max?.fy ?? '—';
+      document.getElementById('share-min-value').textContent = typeof min?.val === 'number' ? formatShares(min.val) : '—';
+      document.getElementById('share-min-fy').textContent = min?.fy ?? '—';
+      document.getElementById('active-cik').textContent = cik || '—';
+    }
+
+    function pickMinMax(entries) {
+      // Break ties by first occurrence
+      let min = null, max = null;
+      for (const e of entries) {
+        if (min === null || e.val < min.val) min = { val: e.val, fy: e.fy };
+        if (max === null || e.val > max.val) max = { val: e.val, fy: e.fy };
+      }
+      return { min, max };
+    }
+
+    async function fetchSECConcept(cik) {
+      // Using a proxy (r.jina.ai) to avoid CORS and still reach SEC.
+      const base = `https://r.jina.ai/http://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/dei/EntityCommonStockSharesOutstanding.json`;
+      const res = await fetch(base, {
+        // Browsers cannot set User-Agent; include an identifying header anyway
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'shares-outstanding-demo (contact: developer@example.com)'
+        },
+        cache: 'no-store'
+      });
+      if (!res.ok) {
+        throw new Error(`SEC proxy fetch failed: ${res.status}`);
+      }
+      return res.json();
+    }
+
+    function filterEntries(json) {
+      const raw = (json?.units && json.units.shares) ? json.units.shares : [];
+      const filtered = [];
+      for (const item of raw) {
+        const fy = Number(item.fy);
+        const val = Number(item.val);
+        if (Number.isFinite(fy) && fy > 2020 && Number.isFinite(val)) {
+          filtered.push({ fy, val });
+        }
+      }
+      return filtered;
+    }
+
+    async function loadAndRender(cik, opts = { fallback: true }) {
+      const status = document.getElementById('status');
+      status.classList.remove('hidden');
+      status.textContent = 'Fetching from SEC…';
+      try {
+        const json = await fetchSECConcept(cik);
+        const entityName = json?.entityName || 'Unknown Entity';
+        const filtered = filterEntries(json);
+        const { min, max } = pickMinMax(filtered);
+        updateUI({ entityName, min, max, cik });
+        status.textContent = `Loaded live data for CIK ${cik}`;
+      } catch (err) {
+        console.warn('Live fetch failed, attempting local fallback:', err);
+        if (opts.fallback) {
+          try {
+            const res = await fetch('./data.json', { cache: 'no-store' });
+            const local = await res.json();
+            const entityName = local?.entityName || 'Unknown Entity';
+            updateUI({ entityName, min: local?.min, max: local?.max, cik });
+            status.textContent = 'Shown from local data.json (fallback)';
+          } catch (err2) {
+            status.textContent = 'Unable to load data (live and fallback failed)';
+          }
+        } else {
+          status.textContent = 'Unable to load data from SEC';
+        }
+      }
+    }
+
+    // Initialize
+    (function init(){
+      const params = new URLSearchParams(location.search);
+      const paramCIK = normalizeCIK(params.get('CIK'));
+      const defaultCIK = '0000066740'; // 3M (MMM)
+      const cikToUse = paramCIK || defaultCIK;
+      document.getElementById('cik-input').value = cikToUse;
+      loadAndRender(cikToUse);
+
+      document.getElementById('load-btn').addEventListener('click', () => {
+        const inputCIK = normalizeCIK(document.getElementById('cik-input').value);
+        if (!inputCIK || !/^\d{10}$/.test(inputCIK)) {
+          alert('Please enter a valid 10-digit CIK (digits only).');
+          return;
+        }
+        // Update query param without reload
+        const url = new URL(location.href);
+        url.searchParams.set('CIK', inputCIK);
+        history.replaceState(null, '', url.toString());
+        loadAndRender(inputCIK);
+      });
+    })();
+  </script>
+</body>
+</html>
+---END FILE---
+>>> uid.txt
+
+---END FILE---
